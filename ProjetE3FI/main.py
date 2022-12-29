@@ -56,7 +56,7 @@ data_dupli_for_map_france = data_prix_carburant  # Uniquement pour ne pas que la
 
 ## ===== MAP IDF
 
-with open('idf.geojson') as response:
+with open('Fichiers_Statiques/idf.geojson') as response:
     ville_idf = json.load(response)
 
 map_prix_carburant_idf = px.choropleth_mapbox(  data_dupli_for_map_idf,
@@ -72,7 +72,7 @@ map_prix_carburant_france = map_prix_carburant_idf  # Valeur simplement pour que
 
 if (isPrintingMapFrance):
     ## ===== MAP FRANCE
-    with open('a-com2022.json') as response:
+    with open('Fichiers_Statiques/a-com2022.json') as response:
         ville_france = json.load(response)
 
     map_prix_carburant_france = px.choropleth_mapbox(   data_dupli_for_map_france,
