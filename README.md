@@ -35,7 +35,7 @@ De plus, grâce à l'échelle des prix sur la droite de la carte, pour chaque ca
 
 ## Developper Guide
     
-Comme dit précédemment, la première ligne de code correspondant à la déclaration de la variable **isPrintingMApFrance** qui est mise à **True** pour afficher la carte de l'Ile de France et de la France; si l'utilisateur veut afficher uniquement l'IDF, il suffit de changer cette variable à **False** .
+Comme dit précédemment, la première ligne de code correspondant à la déclaration de la variable **isPrintingMapFrance** qui est mise à **True** pour afficher la carte de l'Ile de France et de la France; si l'utilisateur veut afficher uniquement l'IDF, il suffit de changer cette variable à **False** .
 
 Concercant les csv, nous les avons récupérés depuis le site avec l'adresse url du site du gouvernement.
 
