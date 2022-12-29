@@ -34,7 +34,7 @@ Projet de Fabien Varoteaux-Lavigne et Inès Dakkak
 
 ## Developper Guide
     
-    Comme dit précédemment, la première ligne de code correspondant à la déclaration de la variable ** isPrintingMApFrance ** est mise à ** False ** pour afficher uniquement la carte de l'Ile de France; si l'utilisateur veut afficher la France entière, il suffit de changer cette variable à ** True ** .
+    Comme dit précédemment, la première ligne de code correspondant à la déclaration de la variable `isPrintingMApFrance` est mise à ** False ** pour afficher uniquement la carte de l'Ile de France; si l'utilisateur veut afficher la France entière, il suffit de changer cette variable à ** True ** .
 
     Concercant les csv, nous les avons récupérés depuis le site avec l'adresse url du site du gouvernement.
 
