@@ -5,7 +5,7 @@ import json
 import dash
 from dash import dcc, html, Input, Output
 
-isPrintingMapFrance = False
+isPrintingMapFrance = True  # Valeur modifiable pour afficher ou non la carte de France
 
 ## ===== Récupération des données depuis le site
 url = "https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-quotidien-test-ods/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true"
@@ -76,18 +76,31 @@ if __name__ == '__main__':
 
     app = dash.Dash(__name__)
 
-    ### ====== HISTOGRAMME ====== ###
+    ### ====== FIGURES DANS HTML ====== ###
 
     num_bins = 300
 
     fig = draw_histo_prix_carburant_par_nombre_and_carburant(num_bins)
 
     app.layout = html.Div(children=[
-        
-        html.H1(children = f'Prix du Carburants sur + de 70000 stations en France (2022)',
-                style = {'textAlign': 'center', 'margin-bottom': '5%', 'font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
-        html.P(children = f"Nombre de bins sur pour l'histogramme",
+        html.Div(children=[
+                    html.H1(
+                        children = "Nombre de stations en france en fonction du prix des carburants à la vente",
+                        style = {'textAlign': 'center', 'font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}
+                    ),
+                    html.Br(),
+                    html.H1(
+                        children = "(sur un total de plus de 7000 stations)",
+                        style = {'textAlign': 'center', 'margin-bottom': '5%', 'margin-top': '-1.5%', 'font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}
+                    ),
+                ],
+        ),
+        
+        # html.H1(children = "Nombre de stations en france en fonction du prix des carburants à la vente" + html.Br() + "(sur un total de plus de 7000 stations)",
+        #         style = {'textAlign': 'center', 'margin-bottom': '5%', 'font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
+
+        html.P(children = "Nombre de bins pour l'histogramme",
                 style = {'margin-left': '1.5%', 'font-weight': "bold",'text-decoration': 'underline', 'font-size': "18px"}),
 
         dcc.Slider(
@@ -103,7 +116,7 @@ if __name__ == '__main__':
             figure = fig
         ),
 
-        html.H1(children = f'Carte du prix du carburant (le plus cher) en Ile de France',
+        html.H1(children = 'Carte du prix du carburant (le plus cher) en Ile de France',
                 style = {'textAlign': 'center','font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
         html.P(children = "Choisissez un carburant :",
@@ -122,7 +135,7 @@ if __name__ == '__main__':
 
         html.Div(children=[
 
-            html.H1(children = f'Carte du prix du carburant (le plus cher) en France',
+            html.H1(children = 'Carte du prix du carburant (le plus cher) en France',
                     style = {'textAlign': 'center','font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
             html.P(children = "Choisissez un carburant :",
@@ -193,6 +206,6 @@ if __name__ == '__main__':
             )
             return fig
 
-    ### ====== FIN HISTOGRAMME ====== ###
+    ### ====== FIN FIGURES DANS HTML ====== ###
 
     app.run_server(debug=True)
