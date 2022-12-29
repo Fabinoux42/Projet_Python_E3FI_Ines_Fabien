@@ -1,11 +1,18 @@
 import pandas as pd
 import plotly.express as px
 import json
+import importlib
 
 import dash
 from dash import dcc, html, Input, Output
 
 isPrintingMapFrance = True  # Valeur modifiable pour afficher ou non la carte de France
+
+name_missing_pack = {"pandas", "plotly.express", "importlib", "dash"}  # Vérification des packages manquants
+for name_pack in name_missing_pack:
+    spec = importlib.util.find_spec(name_pack)
+    if spec is None:
+        print(f"Can't find {name_pack!r} package\n")
 
 ## ===== Récupération des données depuis le site
 url = "https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-quotidien-test-ods/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true"
@@ -40,7 +47,7 @@ mask = (  ( code_commune.str.startswith('75') )    # Mask IDF
         | ( code_commune.str.startswith('95') ))
 
 data_dupli_for_map_idf = data_prix_carburant[mask]
-data_dupli_for_map_france = data_prix_carburant
+data_dupli_for_map_france = data_prix_carburant  # Uniquement pour ne pas que la carte de France pose problème au niveau terminal si isPrintingMapFrance est à False
 
 ## ===== MAP IDF
 
@@ -78,7 +85,7 @@ if __name__ == '__main__':
 
     ### ====== FIGURES DANS HTML ====== ###
 
-    num_bins = 300
+    num_bins = 6
 
     fig = draw_histo_prix_carburant_par_nombre_and_carburant(num_bins)
 
@@ -96,18 +103,15 @@ if __name__ == '__main__':
                     ),
                 ],
         ),
-        
-        # html.H1(children = "Nombre de stations en france en fonction du prix des carburants à la vente" + html.Br() + "(sur un total de plus de 7000 stations)",
-        #         style = {'textAlign': 'center', 'margin-bottom': '5%', 'font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
-        html.P(children = "Nombre de bins pour l'histogramme",
+        html.P(children = "Nombre de bins pour l'histogramme :",
                 style = {'margin-left': '1.5%', 'font-weight': "bold",'text-decoration': 'underline', 'font-size': "18px"}),
 
         dcc.Slider(
             min = 6,
             max = 600,
             step = 100,
-            value = 300,
+            value = num_bins,
             id = "Bins_for_histo_prix_carbu"
         ),
 
@@ -116,7 +120,7 @@ if __name__ == '__main__':
             figure = fig
         ),
 
-        html.H1(children = 'Carte du prix du carburant (le plus cher) en Ile de France',
+        html.H1(children = 'Carte du prix du carburant (le plus cher) en Ile de France par communes',
                 style = {'textAlign': 'center','font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
         html.P(children = "Choisissez un carburant :",
@@ -135,7 +139,7 @@ if __name__ == '__main__':
 
         html.Div(children=[
 
-            html.H1(children = 'Carte du prix du carburant (le plus cher) en France',
+            html.H1(children = 'Carte du prix du carburant (le plus cher) en France par communes',
                     style = {'textAlign': 'center','font-size': "35px", 'text-decoration': 'underline', 'color': '#2fc1fa'}),
 
             html.P(children = "Choisissez un carburant :",
@@ -151,7 +155,24 @@ if __name__ == '__main__':
                 id = "map-prix-carburant-france",
                 figure = map_prix_carburant_france
             )
-        ], style={"display": "block" if isPrintingMapFrance else "none"})  # Affiche la carte FRANCE uniquement si la variable isPrintingMapFrance est à True
+        ], style={"display": "block" if isPrintingMapFrance else "none"}),  # Affiche la carte FRANCE uniquement si la variable isPrintingMapFrance est à True
+
+        html.Div(children=[
+            html.H4(
+                children = 'Crédits :',
+                style = {'margin-left': '1.5%', 'margin-top': '5%', 'font-weight': "bold", 'text-decoration': 'underline', 'font-size': "16px"}
+            ),
+            html.A(
+                children = 'Inès Dakkak',
+                style = {'margin-left': '1.5%', 'margin-top': '2%', 'font-weight': "bold", 'font-size': "16px"}
+            ),
+            html.Br(),
+            html.A(
+                children = 'Fabien Varoteaux-Lavigne',
+                style = {'margin-left': '1.5%', 'font-weight': "bold", 'font-size': "16px"}
+            )
+        ])
+        
     ])
 
     # Graphique
