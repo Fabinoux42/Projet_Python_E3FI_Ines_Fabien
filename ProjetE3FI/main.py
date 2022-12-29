@@ -31,6 +31,11 @@ def draw_histo_prix_carburant_par_nombre_and_carburant(num_bins_for_histo):
         tickangle = 45,
         tickfont = dict(family = 'Rockwell', color = 'crimson', size = 14)
     )
+    fig.update_layout(
+        xaxis_title = "Prix des carburants par tranches",
+        yaxis_title = "Nombre de stations par tranches de prix",
+        legend_title = "couille"
+    )
     return fig
 
 ## ===== Masque pour l'ile de france
