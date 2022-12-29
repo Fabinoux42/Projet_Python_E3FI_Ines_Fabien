@@ -39,11 +39,11 @@ Comme dit précédemment, la première ligne de code correspondant à la déclar
 
 Concercant les csv, nous les avons récupérés depuis le site avec l'adresse url du site du gouvernement.
 
-La fonction principale de notre code est **draw_histo_prix_carburant_par_nombre_and_carburant** . Elle permet de créer un histogramme en fonction du nombre de bin (nombre de regroupement par classe) choisi par l'utilisateur via le curseur. A partir de ce nombre, nous retournons un histogramme initialisé avec la fonction de Plotly *histogram* .
+La fonction principale de notre code est **draw_histo_prix_carburant_par_nombre_and_carburant** . Elle permet de créer un histogramme en fonction du nombre de bin (nombre de regroupement par classe) choisi par l'utilisateur via le curseur. A partir de ce nombre, nous retournons un histogramme initialisé avec la fonction de Plotly **histogram** .
 
 Ensuite, afin de ne sélectionner que l'Ile de France, nous avons créé un masque. En effet, nous avons trié les données du csv en fonction du code des communes, en sélectionnant chaque commune commençant par le code postale des 8 départements en Ile de France. Il suffit alors de traiter et de stocker les données du fichier en fonction de cette sélection. 
 
-Par la suite, pour afficher la carte de l'Ile de France, il nous suffit de faire appel à *px.choropleth_mapbox* en renseignant les paramètres correspondant à l'Ile de France. Nous avons choisi *choropleth_mapbox* afin de pouvoir afficher des polygones de couleurs, ce qui est plus révélateur pour nos données.
+Par la suite, pour afficher la carte de l'Ile de France, il nous suffit de faire appel à **px.choropleth_mapbox** en renseignant les paramètres correspondant à l'Ile de France. Nous avons choisi **choropleth_mapbox** afin de pouvoir afficher des polygones de couleurs, ce qui est plus révélateur pour nos données.
 
 Ensuite nous faisons une condition bouléenne correspondant à l'état de **isPrintingMapFrance**, si c'est vrai alors nous affichons la carte de la France de la même manière que pour l'Ile de France, juste en changeant les paramètres. 
 
