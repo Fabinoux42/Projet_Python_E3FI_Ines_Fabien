@@ -20,6 +20,15 @@ data_prix_carburant = pd.read_csv(url, delimiter=";")
 
 ## ===== Fonction pour le graphique
 def draw_histo_prix_carburant_par_nombre_and_carburant(num_bins_for_histo):
+    """
+        Défini l'histogramme avec le nombre de bins voulu
+
+        Args :
+            num_bins_for_histo (int): Nombre de bins pour l'histogramme
+
+        Returns:
+            plotly.express.histogram: Retourne l'histogramme prêt à être injecté dans le dashboard
+    """
     
     fig = px.histogram(data_prix_carburant, x = "prix_valeur", color = "prix_nom", nbins = num_bins_for_histo, barmode="group", text_auto=True)#, title = "Prix du carburants sur ~70.000 stations en France")
     fig.update_xaxes(
@@ -34,7 +43,7 @@ def draw_histo_prix_carburant_par_nombre_and_carburant(num_bins_for_histo):
     fig.update_layout(
         xaxis_title = "Prix des carburants par tranches",
         yaxis_title = "Nombre de stations par tranches de prix",
-        legend_title = "couille"
+        legend_title = "Carburants"
     )
     return fig
 
@@ -66,7 +75,11 @@ map_prix_carburant_idf = px.choropleth_mapbox(  data_dupli_for_map_idf,
                                                 featureidkey = "properties.code_commune",
                                                 mapbox_style = "carto-positron",
                                                 zoom = 4,
-                                                center = {'lat': 47,'lon': 2}   )
+                                                center = {'lat': 47,'lon': 2},  )
+
+map_prix_carburant_idf.update_layout(
+    legend_title = 'Prix du carburant' 
+)
 
 map_prix_carburant_france = map_prix_carburant_idf  # Valeur simplement pour que la condition d'affichage de dash ne fasse pas de bug quand isPrintingMapFrance est fausse
 
@@ -83,6 +96,9 @@ if (isPrintingMapFrance):
                                                         mapbox_style = "carto-positron",
                                                         zoom = 4,
                                                         center = {'lat': 47,'lon': 2}   )
+    map_prix_carburant_france.update_layout(
+        legend_title = 'Prix du carburant' 
+    )            
 
 if __name__ == '__main__':
 
@@ -186,6 +202,15 @@ if __name__ == '__main__':
         Input('Bins_for_histo_prix_carbu', 'value')
     )
     def update_figure(value):
+        """
+            Met à jour l'histogramme avec le nombre de bins voulu
+
+            Args :
+                value (int): Nombre de bins pour l'histogramme
+
+            Returns:
+                plotly.express.histogram: Retourne l'histogramme prêt à être mis à jour sur le dashboard
+        """
         fig = draw_histo_prix_carburant_par_nombre_and_carburant(value)
         return fig
 
@@ -195,6 +220,15 @@ if __name__ == '__main__':
         [Input("dropdown-carburant-idf", "value")]
     )
     def update_map(selected_carburant):
+        """
+            Met à jour la carte d'Ile de France avec le carburant choisi
+
+            Args :
+                selected_carburant (str): Carburant choisi
+
+            Returns:
+                plotly.express.choropleth_mapbox: Retourne la carte d'Ile de France prête à être mise à jour sur le dashboard
+        """
         data_dupli_for_map_idf_filtered = data_dupli_for_map_idf[
             data_dupli_for_map_idf["prix_nom"] == selected_carburant
         ]
@@ -208,6 +242,9 @@ if __name__ == '__main__':
             zoom=4,
             center={"lat": 47, "lon": 2},
         )
+        fig.update_layout(
+            legend_title = 'Prix du carburant' 
+        )
         return fig
 
     # Map FRANCE
@@ -217,6 +254,15 @@ if __name__ == '__main__':
             [Input("dropdown-carburant-france", "value")]
         )
         def update_map(selected_carburant):
+            """
+                Met à jour la carte de France avec le carburant choisi
+
+                Args :
+                    selected_carburant (str): Carburant choisi
+
+                Returns:
+                    plotly.express.choropleth_mapbox: Retourne la carte de France prête à être mise à jour sur le dashboard
+            """
             data_dupli_for_map_france_filtered = data_dupli_for_map_france[
                 data_dupli_for_map_france["prix_nom"] == selected_carburant
             ]
@@ -229,6 +275,9 @@ if __name__ == '__main__':
                 mapbox_style = "carto-positron",
                 zoom = 4,
                 center = {'lat': 47,'lon': 2},
+            )
+            fig.update_layout(
+                legend_title = 'Prix du carburant' 
             )
             return fig
 
