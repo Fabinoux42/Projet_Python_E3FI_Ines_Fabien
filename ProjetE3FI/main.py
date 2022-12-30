@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import json
+import numpy as np
 import importlib
 
 import dash
@@ -8,7 +9,7 @@ from dash import dcc, html, Input, Output
 
 isPrintingMapFrance = True  # Valeur modifiable pour afficher ou non la carte de France
 
-name_missing_pack = {"pandas", "plotly.express", "importlib", "dash"}  # Vérification des packages manquants
+name_missing_pack = {"pandas", "plotly.express", "importlib", "dash", "numpy"}  # Vérification des packages manquants
 for name_pack in name_missing_pack:
     spec = importlib.util.find_spec(name_pack)
     if spec is None:
@@ -17,6 +18,9 @@ for name_pack in name_missing_pack:
 ## ===== Récupération des données depuis le site
 url = "https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-quotidien-test-ods/download/?format=csv&timezone=Europe/Berlin&use_labels_for_header=true"
 data_prix_carburant = pd.read_csv(url, delimiter=";")
+
+max_price = np.max(data_prix_carburant["prix_valeur"])
+max_price = np.ceil(max_price * 2) / 2  # Arrondi au demi entier supérieur
 
 ## ===== Fonction pour le graphique
 def draw_histo_prix_carburant_par_nombre_and_carburant(num_bins_for_histo):
@@ -29,11 +33,10 @@ def draw_histo_prix_carburant_par_nombre_and_carburant(num_bins_for_histo):
         Returns:
             plotly.express.histogram: Retourne l'histogramme prêt à être injecté dans le dashboard
     """
-    
     fig = px.histogram(data_prix_carburant, x = "prix_valeur", color = "prix_nom", nbins = num_bins_for_histo, barmode="group", text_auto=True)#, title = "Prix du carburants sur ~70.000 stations en France")
     fig.update_xaxes(
         tickangle = 45,
-        tickvals = [0, 0.5, 1, 1.5, 2, 2.5, 3],
+        tickvals = [i / 2 for i in range(0, (int)(max_price + 1) * 2)],  # Défini l'échelle en x pour l'histogramme en fonction de la plus haute valeur de carburant par pas de 0.5 euros
         tickfont = dict(family = 'Rockwell', color = 'crimson', size = 14)
     )
     fig.update_yaxes(
@@ -219,7 +222,7 @@ if __name__ == '__main__':
         Output("map-prix-carburant-idf", "figure"),
         [Input("dropdown-carburant-idf", "value")]
     )
-    def update_map(selected_carburant):
+    def update_map_idf(selected_carburant):
         """
             Met à jour la carte d'Ile de France avec le carburant choisi
 
@@ -253,7 +256,7 @@ if __name__ == '__main__':
             Output("map-prix-carburant-france", "figure"),
             [Input("dropdown-carburant-france", "value")]
         )
-        def update_map(selected_carburant):
+        def update_map_france(selected_carburant):
             """
                 Met à jour la carte de France avec le carburant choisi
 

@@ -3,3 +3,4 @@ plotly.express
 dash
 flask
 importlib
+numpy
